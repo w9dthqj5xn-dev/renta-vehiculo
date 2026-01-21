@@ -232,6 +232,7 @@ function displayInventory(vehicles) {
             <td>${vehicle.mileage || 0} km</td>
             <td>$${vehicle.price_per_day}/día</td>
             <td><span class="status ${vehicle.status}">${vehicle.status.toUpperCase()}</span></td>
+            <td><button class="btn" onclick="deleteVehicle(${vehicle.id})" style="background: #dc3545; padding: 5px 15px; font-size: 0.9em;">Eliminar</button></td>
         `;
         tbody.appendChild(row);
     });
@@ -272,6 +273,55 @@ async function addVehicle(event) {
     }
 }
 
+// Eliminar vehículo
+async function deleteVehicle(vehicleId) {
+    if (!confirm('¿Está seguro de que desea eliminar este vehículo? Esta acción no se puede deshacer.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/vehicles/${vehicleId}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            showMessage('Vehículo eliminado exitosamente', 'success');
+            loadInventory();
+            loadVehicles(); // Actualizar lista de disponibles
+        } else {
+            const error = await response.json();
+            showMessage(error.error || 'Error al eliminar el vehículo', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showMessage('Error al eliminar el vehículo', 'error');
+    }
+}
+
+// Eliminar cliente
+async function deleteCustomer(customerId) {
+    if (!confirm('¿Está seguro de que desea eliminar este cliente? Esta acción no se puede deshacer.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_URL}/customers/${customerId}`, {
+            method: 'DELETE'
+        });
+        
+        if (response.ok) {
+            showMessage('Cliente eliminado exitosamente', 'success');
+            loadCustomers();
+        } else {
+            const error = await response.json();
+            showMessage(error.error || 'Error al eliminar el cliente', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showMessage('Error al eliminar el cliente', 'error');
+    }
+}
+
 // ============== CLIENTES ==============
 
 async function loadCustomers() {
@@ -297,6 +347,7 @@ function displayCustomers(customers) {
             <p><strong>Email:</strong> ${customer.email}</p>
             <p><strong>Teléfono:</strong> ${customer.phone}</p>
             <p><strong>Licencia:</strong> ${customer.license_number}</p>
+            <button class="btn" onclick="deleteCustomer(${customer.id})" style="background: #dc3545; margin-top: 10px; width: 100%;">Eliminar Cliente</button>
         `;
         grid.appendChild(card);
     });
