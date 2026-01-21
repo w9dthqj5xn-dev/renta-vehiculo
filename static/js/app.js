@@ -1,4 +1,7 @@
-const API_URL = 'http://127.0.0.1:5001/api';
+// Detectar automáticamente si estamos en producción o desarrollo
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:5001/api'
+    : `${window.location.origin}/api`;
 
 // Formatear precio con separador de miles
 function formatPriceInput(input) {
