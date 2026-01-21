@@ -3,6 +3,9 @@ const API_URL = window.location.hostname === 'localhost' || window.location.host
     ? 'http://127.0.0.1:5001/api'
     : `${window.location.origin}/api`;
 
+console.log('App.js loaded! API_URL:', API_URL);
+console.log('Current hostname:', window.location.hostname);
+
 // Formatear precio con separador de miles
 function formatPriceInput(input) {
     // Obtener el valor y eliminar todo lo que no sea número
@@ -178,13 +181,21 @@ function toggleEndDate() {
 }
 
 async function loadVehicles() {
+    console.log('Loading vehicles from:', `${API_URL}/vehicles/available`);
     try {
         const response = await fetch(`${API_URL}/vehicles/available`);
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const vehicles = await response.json();
+        console.log('Vehicles loaded:', vehicles.length);
         displayVehicles(vehicles);
     } catch (error) {
         console.error('Error al cargar vehículos:', error);
-        showMessage('Error al cargar los vehículos', 'error');
+        const grid = document.getElementById('vehicles-grid');
+        grid.innerHTML = `<div class="loading" style="color: red;">Error: ${error.message}</div>`;
+        showMessage('Error al cargar los vehículos: ' + error.message, 'error');
     }
 }
 
@@ -192,13 +203,18 @@ function displayVehicles(vehicles) {
     const grid = document.getElementById('vehicles-grid');
     grid.innerHTML = '';
     
+    if (vehicles.length === 0) {
+        grid.innerHTML = '<div class="loading">No hay vehículos disponibles</div>';
+        return;
+    }
+    
     vehicles.forEach(vehicle => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
             <h3>${vehicle.brand} ${vehicle.model}</h3>
             <p><strong>Año:</strong> ${vehicle.year}</p>
-            <p class="price">$${vehicle.price_per_day}/día</p>
+            <p class="price">$${formatPrice(vehicle.price_per_day)}/día</p>
             <span class="status ${vehicle.status}">${vehicle.status.toUpperCase()}</span>
         `;
         grid.appendChild(card);
@@ -220,6 +236,11 @@ function displayInventory(vehicles) {
     const tbody = document.getElementById('inventory-tbody');
     tbody.innerHTML = '';
     
+    if (vehicles.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" class="loading">No hay vehículos en el inventario</td></tr>';
+        return;
+    }
+    
     vehicles.forEach(vehicle => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -230,7 +251,7 @@ function displayInventory(vehicles) {
             <td>${vehicle.plate || 'N/A'}</td>
             <td>${vehicle.color || 'N/A'}</td>
             <td>${vehicle.mileage || 0} km</td>
-            <td>$${vehicle.price_per_day}/día</td>
+            <td>$${formatPrice(vehicle.price_per_day)}/día</td>
             <td><span class="status ${vehicle.status}">${vehicle.status.toUpperCase()}</span></td>
             <td><button class="btn" onclick="deleteVehicle(${vehicle.id})" style="background: #dc3545; padding: 5px 15px; font-size: 0.9em;">Eliminar</button></td>
         `;
@@ -427,12 +448,6 @@ function toggleCustomerForm() {
         container.style.display = 'none';
         toggleText.textContent = '➕ Agregar Nuevo Cliente';
         document.getElementById('customer-form-inline').reset();
-    }
-}
-
-
-        console.error('Error:', error);
-        showMessage('Error al registrar el cliente', 'error');
     }
 }
 
