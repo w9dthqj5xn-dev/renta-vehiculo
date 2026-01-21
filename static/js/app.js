@@ -383,6 +383,59 @@ async function registerCustomer(event) {
     }
 }
 
+// Registrar cliente desde la sección de clientes (formulario inline)
+async function registerCustomerInline(event) {
+    event.preventDefault();
+    
+    const formData = {
+        name: document.getElementById('customer-name-inline').value,
+        email: document.getElementById('customer-email-inline').value,
+        phone: document.getElementById('customer-phone-inline').value,
+        license_number: document.getElementById('customer-license-inline').value
+    };
+    
+    try {
+        const response = await fetch(`${API_URL}/customers`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        });
+        
+        if (response.ok) {
+            showMessage('Cliente registrado exitosamente', 'success');
+            document.getElementById('customer-form-inline').reset();
+            toggleCustomerForm(); // Cerrar el formulario
+            loadCustomers();
+        } else {
+            showMessage('Error al registrar el cliente', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showMessage('Error al registrar el cliente', 'error');
+    }
+}
+
+// Toggle formulario de cliente
+function toggleCustomerForm() {
+    const container = document.getElementById('customer-form-container');
+    const toggleText = document.getElementById('customer-form-toggle-text');
+    
+    if (container.style.display === 'none') {
+        container.style.display = 'block';
+        toggleText.textContent = '❌ Cancelar';
+    } else {
+        container.style.display = 'none';
+        toggleText.textContent = '➕ Agregar Nuevo Cliente';
+        document.getElementById('customer-form-inline').reset();
+    }
+}
+
+
+        console.error('Error:', error);
+        showMessage('Error al registrar el cliente', 'error');
+    }
+}
+
 // ============== RENTAS ==============
 
 async function loadRentals() {

@@ -266,6 +266,37 @@
             <!-- Sección de Clientes -->
             <div id="customers" class="section">
                 <h2>Clientes Registrados</h2>
+                
+                <!-- Botón para mostrar formulario -->
+                <button class="btn" onclick="toggleCustomerForm()" style="margin-bottom: 20px;">
+                    <span id="customer-form-toggle-text">➕ Agregar Nuevo Cliente</span>
+                </button>
+                
+                <!-- Formulario de registro (oculto por defecto) -->
+                <div id="customer-form-container" style="display: none; background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0; color: #1e3c72;">Nuevo Cliente</h3>
+                    <form id="customer-form-inline" onsubmit="registerCustomerInline(event)">
+                        <div class="form-group">
+                            <label for="customer-name-inline">Nombre Completo:</label>
+                            <input type="text" id="customer-name-inline" required placeholder="Ej: Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-email-inline">Email:</label>
+                            <input type="email" id="customer-email-inline" required placeholder="Ej: juan@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-phone-inline">Teléfono:</label>
+                            <input type="tel" id="customer-phone-inline" required placeholder="Ej: 555-0123">
+                        </div>
+                        <div class="form-group">
+                            <label for="customer-license-inline">Número de Licencia:</label>
+                            <input type="text" id="customer-license-inline" required placeholder="Ej: LIC-123456">
+                        </div>
+                        <button type="submit" class="btn" style="margin-right: 10px;">Guardar Cliente</button>
+                        <button type="button" class="btn" onclick="toggleCustomerForm()" style="background: #6c757d;">Cancelar</button>
+                    </form>
+                </div>
+                
                 <div id="customers-grid" class="grid">
                     <div class="loading">Cargando clientes...</div>
                 </div>
