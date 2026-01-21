@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#1e3c72"/>
+  <g transform="translate(256,256)">
+    <!-- Carro -->
+    <g transform="scale(8)">
+      <path d="M-12,-4 L-8,-8 L8,-8 L12,-4 L12,2 L10,4 L-10,4 L-12,2 Z" fill="#ffffff"/>
+      <circle cx="-7" cy="4" r="2" fill="#2a5298"/>
+      <circle cx="7" cy="4" r="2" fill="#2a5298"/>
+      <rect x="-7" y="-7" width="6" height="4" rx="1" fill="#1e3c72"/>
+      <rect x="2" y="-7" width="6" height="4" rx="1" fill="#1e3c72"/>
+    </g>
+  </g>
+</svg>
